@@ -21,6 +21,59 @@ public class AdController {
 //      this.adViewService = null;
     }
 
+// 1    Save
+
+     @PostMapping("/saveAd")
+    public ResponseEntity<Ad> saveAd(@RequestBody Ad ad) {
+        Ad savedAd = adService.saveAd(ad);
+        return ResponseEntity.ok(savedAd);
+    }
+    
+// 1        Get Id
+
+//    @GetMapping("/api/{Id}")
+//public ResponseEntity<Ad> getAdById(@PathVariable("Id") Integer Id) {
+//    Ad ad = adService.getAdById( Id);
+//    if (ad != null) {
+//        return ResponseEntity.ok(ad);
+//    } else {
+//        return ResponseEntity.notFound().build();
+//    }
+//}
+//    1        Get Id + increment       
+@GetMapping("/{Id}")
+public ResponseEntity<Ad> getAdByIdAndIncrementViews(@PathVariable("Id") Integer Id) {
+    Ad ad = adService.getAdById(Id);
+    if (ad != null) {
+        adService.incrementViews(Id);
+        return ResponseEntity.ok(ad);
+    }
+    return ResponseEntity.notFound().build();
+}
+    @GetMapping("/{Id}/views/day")
+    public ResponseEntity<Integer> getAdViewsForDay(@PathVariable("Id") Integer Id) {
+        int adViewsForDay = adService.getAdViewsForDay(Id);
+        return ResponseEntity.ok(adViewsForDay);
+    }
+
+    @GetMapping("/{Id}/views/week")
+    public ResponseEntity<Integer> getAdViewsForWeek(@PathVariable("Id") Integer Id) {
+        int adViewsForWeek = adService.getAdViewsForWeek(Id);
+        return ResponseEntity.ok(adViewsForWeek);
+    }
+
+    @GetMapping("/{Id}/views/month")
+    public ResponseEntity<Integer> getAdViewsForMonth(@PathVariable("Id") Integer Id) {
+        int adViewsForMonth = adService.getAdViewsForMonth(Id);
+        return ResponseEntity.ok(adViewsForMonth);
+    }
+    
+    
+}
+    
+
+//            1   
+
 //@GetMapping("/api/adViewsByWeek/Id}")
 //public ResponseEntity<Map<LocalDate, Integer>> getAdViewsByWeek(@PathVariable("Id") Integer Id,
 //        @RequestParam("startDate") LocalDate startDate,
@@ -46,7 +99,7 @@ public class AdController {
 //}
 //
 //
-//    @GetMapping("/adViews/month/Id}")
+//    @GetMapping("/adViews/month/{Id}")
 //    public ResponseEntity<Map<YearMonth, Integer>> getAdViewsByMonth(
 //            @PathVariable("Id") Integer Id,
 //            @RequestParam("startDate") YearMonth startDate,
@@ -84,80 +137,3 @@ public class AdController {
 //}
 
 
-
-    @GetMapping("/{Id}/views/day")
-    public ResponseEntity<Integer> getAdViewsForDay(@PathVariable("Id") Integer Id) {
-        int adViewsForDay = adService.getAdViewsForDay(Id);
-        return ResponseEntity.ok(adViewsForDay);
-    }
-
-    @GetMapping("/{Id}/views/week")
-    public ResponseEntity<Integer> getAdViewsForWeek(@PathVariable("Id") Integer Id) {
-        int adViewsForWeek = adService.getAdViewsForWeek(Id);
-        return ResponseEntity.ok(adViewsForWeek);
-    }
-
-    @GetMapping("/{Id}/views/month")
-    public ResponseEntity<Integer> getAdViewsForMonth(@PathVariable("Id") Integer Id) {
-        int adViewsForMonth = adService.getAdViewsForMonth(Id);
-        return ResponseEntity.ok(adViewsForMonth);
-    }
-
-
-
-
-//     Save
-
-     @PostMapping("/saveAd")
-    public ResponseEntity<Ad> saveAd(@RequestBody Ad ad) {
-        Ad savedAd = adService.saveAd(ad);
-        return ResponseEntity.ok(savedAd);
-    }
-    
-//        Get Id
-
-    @GetMapping("/api/{Id}")
-public ResponseEntity<Ad> getAdById(@PathVariable("Id") Integer Id) {
-    Ad ad = adService.getAdById( Id);
-    if (ad != null) {
-        return ResponseEntity.ok(ad);
-    } else {
-        return ResponseEntity.notFound().build();
-    }
-}
-// Помилковий метод
-
-//@GetMapping("/{Id}")
-//public ResponseEntity<Ad> getAdByIdAndIncrementViews(@PathVariable("Id") Integer Id) {
-//    Ad ad = adService.getAdById(Id);
-//    if (ad != null) {
-//        adService.incrementViews(Id);
-//        return ResponseEntity.ok(ad);
-//    }
-//    return ResponseEntity.notFound().build();
-//}
-
-//    Його виправлення помилки
-//
-//@GetMapping("/{Id}")
-//public ResponseEntity<Ad> getAdByIdAndIncrementViews(@PathVariable("Id") Integer Id) {
-//    Ad ad = adService.getAdById(Id);
-//    if (ad != null) {
-//        ResponseEntity.ok(ad);
-//        adService.incrementViews(Id);
-//        return ResponseEntity.ok(ad);
-//    }
-//    return ResponseEntity.notFound().build();
-//}
-@GetMapping("/{Id}")
-public ResponseEntity<Ad> getAdByIdAndIncrementViews(@PathVariable("Id") Integer Id) {
-    Ad ad = adService.getAdById(Id);
-    if (ad != null) {
-        adService.incrementViews(Id);
-        return ResponseEntity.ok(ad);
-    }
-    return ResponseEntity.notFound().build();
-}
-
-
-}
