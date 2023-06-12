@@ -103,6 +103,18 @@
                         <groupId>com.fasterxml.jackson.core</groupId>
                       <artifactId>jackson-databind</artifactId>
                      </dependency>
+                <!--
+                         Інші залежності -->
+<!--                        <dependency>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-starter-web</artifactId>
+                        </dependency>
+                    -->
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+              
+                </dependency>
 
           
     </dependencies>

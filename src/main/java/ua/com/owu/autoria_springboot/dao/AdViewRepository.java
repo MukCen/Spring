@@ -12,13 +12,14 @@ import ua.com.owu.autoria_springboot.models.*;
  */
 
 public interface AdViewRepository extends JpaRepository <AdView, Integer>, JpaSpecificationExecutor<AdView >  {
+
+}
 //   @Modifying
 //    @Transactional
 //    void saveAdView(AdView adView);
 //     @Modifying
 //    @Transactional
 //    void saveAd(Ad ad);
-}
 //package ua.com.owu.feb_2023_springboot.dao;
 //
 //import jakarta.transaction.Transactional;

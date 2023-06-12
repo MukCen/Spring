@@ -1,7 +1,7 @@
 package ua.com.owu.autoria_springboot.controllers;
 
 
-import org.springframework.beans.factory.annotation.*;
+import java.math.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import ua.com.owu.autoria_springboot.models.*;
@@ -11,36 +11,53 @@ import ua.com.owu.autoria_springboot.services.*;
 @RestController
 @RequestMapping("/ads")
 public class AdController {
- 
-  @Autowired  
+ private final PrivatBankCurrencyService privatBankCurrencyService;
+
   private final AdService adService;
 //  private final AdViewService adViewService;
     
-    public AdController(AdService adService) {
+    public AdController(AdService adService, ua.com.owu.autoria_springboot.services.PrivatBankCurrencyService privatBankCurrencyService) {
         this.adService = adService;
 //      this.adViewService = null;
+     this.privatBankCurrencyService = privatBankCurrencyService;
     }
 
 // 1    Save
+    @PostMapping("/saveAd")
+public ResponseEntity<Ad> saveAd(@RequestBody Ad ad) {
+    try {
+        BigDecimal uahRate = privatBankCurrencyService.getUsdExchangeRate();
+        BigDecimal eurRate = privatBankCurrencyService.getEurExchangeRate();
 
-     @PostMapping("/saveAd")
-    public ResponseEntity<Ad> saveAd(@RequestBody Ad ad) {
-        Ad savedAd = adService.saveAd(ad);
-        return ResponseEntity.ok(savedAd);
+        adService.calculateCurrency(ad, uahRate, eurRate);
+        adService.saveAd(ad);
+         return ResponseEntity.ok(ad);
+    } catch (Exception e) {
+        // Обробка винятків та логування помилок
+        System.out.println("Сталася помилка при збереженні оголошення: " + e.getMessage());
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
+}
+
+
+//     @PostMapping("/saveAd")
+//    public ResponseEntity<String> saveAd(@RequestBody Ad ad) {
+//  try {
+//        adService.calculateCurrency(ad);
+//        return ResponseEntity.ok("Ad created successfully");
+//    } catch (Exception e) {
+//        // Обробка винятків та логування помилок
+//        System.out.println("Сталася помилка при створенні оголошення: " + e.getMessage());
+//        e.printStackTrace();
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create ad");
+//    }
+//}
+
     
 // 1        Get Id
 
-//    @GetMapping("/api/{Id}")
-//public ResponseEntity<Ad> getAdById(@PathVariable("Id") Integer Id) {
-//    Ad ad = adService.getAdById( Id);
-//    if (ad != null) {
-//        return ResponseEntity.ok(ad);
-//    } else {
-//        return ResponseEntity.notFound().build();
-//    }
-//}
-//    1        Get Id + increment       
+//  1        Get Id + increment       
 @GetMapping("/{Id}")
 public ResponseEntity<Ad> getAdByIdAndIncrementViews(@PathVariable("Id") Integer Id) {
     Ad ad = adService.getAdById(Id);
@@ -67,11 +84,23 @@ public ResponseEntity<Ad> getAdByIdAndIncrementViews(@PathVariable("Id") Integer
         int adViewsForMonth = adService.getAdViewsForMonth(Id);
         return ResponseEntity.ok(adViewsForMonth);
     }
-    
+    @DeleteMapping("/{id}/delete")
+public ResponseEntity<String> deleteAdById(@PathVariable("id") Integer id) {
+    try {
+        adService.deleteById(id);
+        return ResponseEntity.ok("Оголошення з ID " + id + " було успішно видалено");
+    } catch (Exception e) {
+        // Обробка винятків та логування помилок
+        System.out.println("Сталася помилка при видаленні оголошення: " + e.getMessage());
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Сталася помилка при видаленні оголошення");
+    }
+}
+
     
 }
-    
 
+    
 //            1   
 
 //@GetMapping("/api/adViewsByWeek/Id}")

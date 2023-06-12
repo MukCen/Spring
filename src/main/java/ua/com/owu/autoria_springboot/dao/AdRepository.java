@@ -10,15 +10,17 @@ import ua.com.owu.autoria_springboot.models.*;
  *
  * @author HP
  */
-
+@org.springframework.stereotype.Repository
 public interface AdRepository extends JpaRepository <Ad, Integer>, JpaSpecificationExecutor<Ad >  {
 
    
      Ad getAdById(Integer Id);
+}
 //     @Modifying
 //    @Transactional
-//    void saveAd(Ad ad);
-}
+//    void saveAd(Ad ad);}//     @Modifying
+//    @Transactional
+//    void saveAd(Ad a
 //package ua.com.owu.feb_2023_springboot.dao;
 //
 //import jakarta.transaction.Transactional;
